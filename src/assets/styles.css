@@ -54,7 +54,7 @@ body {
   box-shadow: 0 0 3px rgba(255, 255, 255, 0.7);
 }
 
-.user-info {
+.auth-info {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -64,12 +64,6 @@ body {
   width: 30px;
   height: 30px;
   border-radius: 50%;
-  background: #ddd;
-}
-
-.user-name {
-  font-size: 16px;
-  color: white;
 }
 
 .add-post-button {
@@ -647,4 +641,31 @@ body {
 
 .modal-close:hover {
   color: #000;
+}
+
+.auth-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.user-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+}
+
+.auth-button {
+  background-color: #4285f4;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.auth-button:hover {
+  background-color: #357ae8;
 }

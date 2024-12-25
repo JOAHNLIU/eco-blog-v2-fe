@@ -26,9 +26,9 @@ function PostPage() {
 
   useEffect(() => {
     const loadData = async () => {
-      await fetchPosts(); // Завантаження постів
-      await fetchComments(postId); // Завантаження коментарів
-      setLoading(false); // Завершення завантаження
+      await fetchPosts();
+      await fetchComments(postId)
+      setLoading(false);
     };
 
     loadData();

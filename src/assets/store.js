@@ -1,7 +1,6 @@
 import { create } from "zustand";
 
 const useStore = create((set) => ({
-  user: null,
   posts: [],
   comments: {},
   currentPage: 1,
@@ -31,7 +30,15 @@ const useStore = create((set) => ({
       comments: { ...state.comments, [postId]: mockComments },
     }));
   },
-  setUser: (user) => set({ user }),
+  user: JSON.parse(localStorage.getItem("user")) || null,
+  setUser: (user) => {
+    localStorage.setItem("user", JSON.stringify(user));
+    set({ user });
+  },
+  clearUser: () => {
+    localStorage.removeItem("user");
+    set({ user: null });
+  },
   toggleLikePost: (postId) => {
     set((state) => ({
       posts: state.posts.map((post) =>
