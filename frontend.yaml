@@ -21,10 +21,12 @@ handlers:
   - url: /(.*\.js)
     static_files: dist/\1
     upload: dist/(.*\.js)
+    mime_type: application/javascript
 
   - url: /(.*\.css)
     static_files: dist/\1
     upload: dist/(.*\.css)
+    mime_type: text/css
 
   - url: /.*
     static_files: dist/index.html
