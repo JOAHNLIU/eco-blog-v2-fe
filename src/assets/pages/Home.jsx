@@ -103,7 +103,7 @@ function Home() {
         <Pagination
           currentPage={currentPage}
           onPageChange={handlePageChange}
-          hasNextPage={posts.length >= 5} // Використовуємо фіксовану кількість постів на сторінку
+          hasNextPage={posts.length >= 5}
         />
       </div>
       {showLoginModal && (
