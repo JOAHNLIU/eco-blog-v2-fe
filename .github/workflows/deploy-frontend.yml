@@ -1,4 +1,4 @@
-name: Deploy Frontend to App Engine
+name: Deploy to App Engine
 
 on:
   push:
@@ -27,6 +27,12 @@ jobs:
         run: npm run lint
 
       - name: Run tests
+        env:
+          POSTGRES_HOST: ${{ secrets.POSTGRES_HOST }}
+          POSTGRES_PORT: ${{ secrets.POSTGRES_PORT }}
+          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          POSTGRES_DB: ${{ secrets.TEST_POSTGRES_DB }}
         run: npm test
 
   deploy:
@@ -48,20 +54,13 @@ jobs:
             gcloud app create --project=${{ secrets.APP_ENGINE_PROJECT }} --region=us-central
           fi
 
-      - name: Install dependencies
-        run: npm install
-
-      - name: Build Frontend
-        run: npm run build
-
-      - name: Move build to App Engine directory
-        run: |
-          mkdir -p appengine_dist
-          mv dist/* appengine_dist/
-          cp app.yaml appengine_dist/
-
-      - name: Deploy to App Engine
+      - name: Deploy Frontend Service
         uses: google-github-actions/deploy-appengine@v1
         with:
           project_id: ${{ secrets.APP_ENGINE_PROJECT }}
-          deliverables: appengine_dist
+          deliverables: frontend.yaml
+
+      - name: Deploy Dispatch File
+        run: |
+          echo "Deploying dispatch.yaml"
+          gcloud app deploy dispatch.yaml --project=${{ secrets.APP_ENGINE_PROJECT }} --quiet

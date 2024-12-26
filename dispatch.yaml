@@ -1,0 +1,5 @@
+dispatch:
+  - url: "eco-blog-edu.org.ua/api/*"
+    service: backend
+  - url: "eco-blog-edu.org.ua/*"
+    service: frontend
