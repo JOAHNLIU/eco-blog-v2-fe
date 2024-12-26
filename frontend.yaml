@@ -1,5 +1,5 @@
 runtime: nodejs22
-service: backend
+service: frontend
 
 env_variables:
   NODE_ENV: "production"
