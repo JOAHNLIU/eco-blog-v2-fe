@@ -58,6 +58,7 @@ jobs:
         run: |
           mkdir -p appengine_dist
           mv dist/* appengine_dist/
+          cp app.yaml appengine_dist/
 
       - name: Deploy to App Engine
         uses: google-github-actions/deploy-appengine@v1
