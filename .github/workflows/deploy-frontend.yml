@@ -48,11 +48,19 @@ jobs:
             gcloud app create --project=${{ secrets.APP_ENGINE_PROJECT }} --region=us-central
           fi
 
+      - name: Install dependencies
+        run: npm install
+
       - name: Build Frontend
         run: npm run build
+
+      - name: Move build to App Engine directory
+        run: |
+          mkdir -p appengine_dist
+          mv dist/* appengine_dist/
 
       - name: Deploy to App Engine
         uses: google-github-actions/deploy-appengine@v1
         with:
           project_id: ${{ secrets.APP_ENGINE_PROJECT }}
-          deliverables: dist
+          deliverables: appengine_dist
