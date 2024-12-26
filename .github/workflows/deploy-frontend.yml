@@ -54,6 +54,9 @@ jobs:
             gcloud app create --project=${{ secrets.APP_ENGINE_PROJECT }} --region=us-central
           fi
 
+      - name: Install dependencies
+        run: npm install
+
       - name: Build Frontend
         run: npm run build
 
