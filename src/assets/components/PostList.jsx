@@ -1,4 +1,3 @@
-import React from 'react';
 import LikeButton from './LikeButton';
 
 function PostList({ posts, onLike, onPostClick }) {

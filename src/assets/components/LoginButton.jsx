@@ -9,9 +9,11 @@ function AuthButton() {
     const provider = new GoogleAuthProvider();
     try {
       const result = await signInWithPopup(auth, provider);
+      const accessToken = await result.user.getIdToken();
       const loggedUser = {
         displayName: result.user.displayName,
         photoURL: result.user.photoURL,
+        accessToken: accessToken,
       };
       setUser(loggedUser);
     } catch (error) {

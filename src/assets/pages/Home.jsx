@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import AddPostModal from '../components/AddPostModal';
@@ -19,7 +19,6 @@ function Home() {
     addPost,
     currentPage,
     setCurrentPage,
-    postsPerPage,
   } = useStore();
 
   const [searchQuery, setSearchQuery] = useState('');
@@ -31,10 +30,6 @@ function Home() {
   const location = useLocation();
 
   useEffect(() => {
-    fetchPosts();
-  }, [fetchPosts]);
-
-  useEffect(() => {
     const params = new URLSearchParams(location.search);
     const page = parseInt(params.get('page'), 10) || 1;
     const sort = params.get('sort') || 'date';
@@ -42,7 +37,8 @@ function Home() {
     setCurrentPage(page);
     setSortType(sort);
     setSearchQuery(query);
-  }, [location.search, setCurrentPage]);
+    fetchPosts(query, sort, page);
+  }, [location.search, fetchPosts, setCurrentPage]);
 
   const handleActionWithAuthCheck = (callback) => {
     if (!user) {
@@ -63,23 +59,6 @@ function Home() {
     }
   };
 
-  const sortedPosts = [...posts].sort((a, b) => {
-    if (sortType === 'date') {
-      return new Date(b.date) - new Date(a.date);
-    }
-    if (sortType === 'likes') {
-      return b.likes - a.likes;
-    }
-    return 0;
-  });
-
-  const filteredPosts = sortedPosts.filter((post) =>
-    post.title.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
-  const startIndex = (currentPage - 1) * postsPerPage;
-  const paginatedPosts = filteredPosts.slice(startIndex, startIndex + postsPerPage);
-
   const handleAddPost = (newPost) => {
     addPost({
       ...newPost,
@@ -92,7 +71,7 @@ function Home() {
     <div>
       <Navbar
         user={user}
-        onLogin={() => setUser({ displayName: 'John', photoURL: 'https://via.placeholder.com/30' })}
+        onLogin={() => setUser({ displayName: 'John', photoURL: 'https://via.placeholder.com/30'})}
         onLogout={() => setUser(null)}
       />
       <div className="container">
@@ -117,14 +96,14 @@ function Home() {
           Add new post
         </button>
         <PostList
-          posts={paginatedPosts || []}
+          posts={posts || []}
           onPostClick={handlePostClick}
           onLike={(postId) => handleActionWithAuthCheck(() => toggleLikePost(postId))}
         />
         <Pagination
           currentPage={currentPage}
           onPageChange={handlePageChange}
-          hasNextPage={filteredPosts.length > startIndex + postsPerPage}
+          hasNextPage={posts.length >= 5} // Використовуємо фіксовану кількість постів на сторінку
         />
       </div>
       {showLoginModal && (

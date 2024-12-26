@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import LoginModal from '../components/LoginModal';
@@ -9,8 +9,8 @@ function PostPage() {
   const { postId } = useParams();
   const navigate = useNavigate();
   const {
-    posts,
-    fetchPosts,
+    postDetails,
+    fetchPostDetails,
     user,
     setUser,
     toggleLikePost,
@@ -26,21 +26,19 @@ function PostPage() {
 
   useEffect(() => {
     const loadData = async () => {
-      await fetchPosts();
-      await fetchComments(postId)
+      await fetchPostDetails(postId);
+      await fetchComments(postId);
       setLoading(false);
     };
 
     loadData();
-  }, [fetchPosts, fetchComments, postId]);
-
-  const post = posts.find((post) => post.id === parseInt(postId, 10));
+  }, [fetchPostDetails, fetchComments, postId]);
 
   if (loading) {
     return <div>Loading...</div>;
   }
 
-  if (!post) {
+  if (!postDetails) {
     return (
       <div>
         <Navbar
@@ -75,7 +73,7 @@ function PostPage() {
         isLiked: false,
       };
 
-      addComment(post.id, newCommentObj);
+      addComment(postId, newCommentObj);
       setNewComment('');
     }
   };
@@ -99,17 +97,17 @@ function PostPage() {
         <button className="back-button" onClick={() => navigate('/')}>
           Back
         </button>
-        <div className="post-details">
-          <h1>{post.title}</h1>
-          <p>{post.text}</p>
+        <div>
+          <h1>{postDetails.title}</h1>
+          <p>{postDetails.text}</p>
           <div className="meta">
-            <span>By {post.author}</span> | <span>{new Date(post.date).toLocaleDateString()}</span>
+            <span>By {postDetails.author}</span> | <span>{new Date(postDetails.date).toLocaleDateString()}</span>
           </div>
           <div className="actions">
             <LikeButton
-              isLiked={post.isLiked}
-              likes={post.likes}
-              onToggleLike={() => handleActionWithAuthCheck(() => toggleLikePost(post.id))}
+              isLiked={postDetails.isLiked}
+              likes={postDetails.likes}
+              onToggleLike={() => handleActionWithAuthCheck(() => toggleLikePost(postDetails.id))}
             />
           </div>
         </div>
@@ -126,7 +124,7 @@ function PostPage() {
                       isLiked={comment.isLiked}
                       likes={comment.likes}
                       onToggleLike={() =>
-                        handleActionWithAuthCheck(() => toggleLikeComment(post.id, comment.id))
+                        handleActionWithAuthCheck(() => toggleLikeComment(postId, comment.id))
                       }
                     />
                   </div>

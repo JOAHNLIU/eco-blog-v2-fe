@@ -1,5 +1,3 @@
-import React from 'react';
-
 function Pagination({ currentPage, onPageChange, hasNextPage }) {
   return (
     <div className="pagination">
