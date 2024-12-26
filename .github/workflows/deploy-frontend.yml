@@ -1,0 +1,58 @@
+name: Deploy Frontend to App Engine
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test-and-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run lint
+        run: npm run lint
+
+      - name: Run tests
+        run: npm test
+
+  deploy:
+    if: github.ref == 'refs/heads/main' && success()
+    needs: test-and-lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Authenticate to GCP
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+
+      - name: Ensure App Engine is initialized
+        run: |
+          if ! gcloud app describe --project=${{ secrets.APP_ENGINE_PROJECT }}; then
+            gcloud app create --project=${{ secrets.APP_ENGINE_PROJECT }} --region=us-central
+          fi
+
+      - name: Build Frontend
+        run: npm run build
+
+      - name: Deploy to App Engine
+        uses: google-github-actions/deploy-appengine@v1
+        with:
+          project_id: ${{ secrets.APP_ENGINE_PROJECT }}
+          deliverables: dist

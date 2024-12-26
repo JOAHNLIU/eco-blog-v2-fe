@@ -1,17 +1,16 @@
 import { create } from "zustand";
 import axios from "axios";
 
-const API_BASE_URL = "http://localhost:3000";
+const API_BASE_URL = "https://eco-blog-edu.org.ua/api/";
 
 const useStore = create((set) => ({
   posts: [],
-  postDetails: null, // Зберігає конкретний пост
+  postDetails: null,
   comments: {},
   currentPage: 1,
   postsPerPage: 5,
   user: JSON.parse(localStorage.getItem("user")) || null,
 
-  // Метод для перевірки токена
   checkToken: async () => {
     const token = localStorage.getItem("authToken");
     if (!token) return false;
