@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import axios from "axios";
 
-const API_BASE_URL = "https://eco-blog-edu.org.ua/api/";
+const API_BASE_URL = "https://eco-blog-edu.org.ua";
 
 const useStore = create((set) => ({
   posts: [],
@@ -70,7 +70,7 @@ const useStore = create((set) => ({
   fetchPostDetails: async (postId) => {
     try {
       const response = await useStore.getState().authenticatedRequest({
-        url: `${API_BASE_URL}/posts/${postId}`,
+        url: `${API_BASE_URL}/api/posts/${postId}`,
         method: "get",
       });
       set({ postDetails: response.data });
@@ -82,7 +82,7 @@ const useStore = create((set) => ({
   fetchComments: async (postId) => {
     try {
       const response = await useStore.getState().authenticatedRequest({
-        url: `${API_BASE_URL}/posts/${postId}/comments`,
+        url: `${API_BASE_URL}/api/posts/${postId}/comments`,
         method: "get",
       });
       set((state) => ({
@@ -108,7 +108,7 @@ const useStore = create((set) => ({
   toggleLikePost: async (postId) => {
     try {
       const response = await useStore.getState().authenticatedRequest({
-        url: `${API_BASE_URL}/posts/${postId}/like`,
+        url: `${API_BASE_URL}/api/posts/${postId}/like`,
         method: "post",
       });
       set((state) => ({
@@ -126,7 +126,7 @@ const useStore = create((set) => ({
   toggleLikeComment: async (postId, commentId) => {
     try {
       const response = await useStore.getState().authenticatedRequest({
-        url: `${API_BASE_URL}/posts/${postId}/comments/${commentId}/like`,
+        url: `${API_BASE_URL}/api/posts/${postId}/comments/${commentId}/like`,
         method: "post",
       });
       set((state) => ({
@@ -145,7 +145,7 @@ const useStore = create((set) => ({
   addPost: async (newPost) => {
     try {
       const response = await useStore.getState().authenticatedRequest({
-        url: `${API_BASE_URL}/posts`,
+        url: `${API_BASE_URL}/api/posts`,
         method: "post",
         data: newPost,
       });
@@ -160,7 +160,7 @@ const useStore = create((set) => ({
   addComment: async (postId, newComment) => {
     try {
       const response = await useStore.getState().authenticatedRequest({
-        url: `${API_BASE_URL}/posts/${postId}/comments`,
+        url: `${API_BASE_URL}/api/posts/${postId}/comments`,
         method: "post",
         data: newComment,
       });
