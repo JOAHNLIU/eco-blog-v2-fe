@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 function SortDropdown({ onSortChange, currentSort }) {
   const [showDropdown, setShowDropdown] = useState(false);
