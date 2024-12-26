@@ -59,6 +59,7 @@ jobs:
         with:
           project_id: ${{ secrets.APP_ENGINE_PROJECT }}
           deliverables: frontend.yaml
+          promote: true
 
       - name: Deploy Dispatch File
         run: |
