@@ -34,13 +34,18 @@ const useStore = create((set) => ({
   },
 
   authenticatedRequest: async (config) => {
-    const isValid = await useStore.getState().checkToken();
-    if (!isValid) throw new Error("Unauthorized: Token expired");
-
     const token = localStorage.getItem("authToken");
+
     if (token) {
-      config.headers = { ...config.headers, Authorization: `Bearer ${token}` };
+      const isValid = await useStore.getState().checkToken();
+      if (isValid) {
+        config.headers = {
+          ...config.headers,
+          Authorization: `Bearer ${token}`,
+        };
+      }
     }
+
     return axios(config);
   },
 
